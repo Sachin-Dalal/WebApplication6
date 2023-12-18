@@ -24,177 +24,152 @@ namespace WebApplication6.Repository
         public AppRepository(Appdbcontext context, IConfiguration configuration)
         {
             //IConfiguration configuration
-
             this.context = context;
             this._configuration = configuration;
 
-
         }
 
-
-
-        //public dynamic GetBranch(AppViewModel formViewDetails)
-        //{
-
-        //    ResponseViewModel model = new ResponseViewModel();
-
-        //    List<ResponseViewModel> newmodel = new List<ResponseViewModel>();
-
-        //    try
-        //    {
-        //        if (formViewDetails != null)
-        //        {
-        //            DataTable logindt = new DataTable();
-
-        //            logindt = this.context.GetBranch(formViewDetails);
-
-
-        //            if (logindt.Rows.Count > 0)
-        //            {
-
-        //                List<CompanyList> CompanyListnew = new List<CompanyList>();
-
-        //                foreach (DataRow dr in logindt.Rows)
-        //                {
-        //                    CompanyListnew.Add(new CompanyList
-        //                    {
-
-        //                        BranchId = Convert.ToInt32(dr["BranchId"]),
-        //                        Name = dr["Name"].ToString()
-        //                    });
-        //                }
-
-
-        //                List<AppViewModel> objCompanyList1 = new List<AppViewModel>();
-        //                objCompanyList1.Add(new AppViewModel
-        //                {
-        //                    companyList = CompanyListnew,
-
-        //                });
-
-
-        //                string JSONString = JsonConvert.SerializeObject(objCompanyList1);
-
-        //                return JSONString;
-
-        //            }
-        //            else
-        //            {
-        //                model = new ResponseViewModel()
-        //                {
-        //                    Status = "Fail",
-        //                    Code = "404",
-        //                    Message = "Wrong Username and Password !",
-
-        //                };
-        //                newmodel.Add(model);
-        //                var CustomizedData = newmodel.Select(e => new
-        //                {
-        //                    e.Status,
-        //                    e.Code,
-        //                    e.Message
-        //                });
-
-        //                return CustomizedData;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            model = new ResponseViewModel()
-        //            {
-        //                Status = "Fail",
-        //                Code = "400",
-        //                Message = "Request should not be empty."
-
-        //            };
-
-        //            newmodel.Add(model);
-        //            var CustomizedData = newmodel.Select(e => new
-        //            {
-        //                e.Status,
-        //                e.Code,
-        //                e.Message
-        //            });
-
-        //            return CustomizedData;
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        model = new ResponseViewModel()
-        //        {
-        //            Status = " ",
-        //            Code = "500",
-        //            Message = ex.Message,
-
-        //        };
-        //        newmodel.Add(model);
-        //        var CustomizedData = newmodel.Select(e => new
-        //        {
-        //            e.Status,
-        //            e.Code,
-        //            e.Message
-
-        //        });
-
-        //        return CustomizedData;
-        //    }
-        //}
-
-        public dynamic SaveColumnsDetails(AppViewModel formViewDetails)
+        public dynamic GetEmp()
         {
+            EmpDetails opdModel = new EmpDetails();
+            List<EmpDetails> newopdModel = new List<EmpDetails>();
 
             ResponseViewModel model = new ResponseViewModel();
-
             List<ResponseViewModel> newmodel = new List<ResponseViewModel>();
 
             try
             {
-                //if (formViewDetails != null)
-                //{
-                DataTable logindt = new DataTable();
+                DataTable result = this.context.GetEmp();
 
-                logindt = this.context.SaveColumnsDetails(formViewDetails);
-
-                if (logindt.Rows.Count > 0)
+                if (result.Rows.Count > 0)
                 {
-                    return logindt;
 
+                    for (int i = 0; i < result.Rows.Count; i++)
+                    {
+                        opdModel = new EmpDetails()
+                        {
+                            EmpCode = Convert.ToInt32(result.Rows[i]["EmpCode"].ToString()),
+                            EmpName = result.Rows[i]["EmpName"].ToString(),
+                            DOB = result.Rows[i]["DOB"].ToString(),
+                            Gender = result.Rows[i]["Gender"].ToString(),
+                            Department = result.Rows[i]["Department"].ToString(),
+                            Designation = result.Rows[i]["Designation"].ToString(),
+                            BasicSalary = result.Rows[i]["BasicSalary"].ToString(),
+                            Code = 200,
+                            Message = "Success"
+                        };
+
+                        newopdModel.Add(opdModel);
+                    }
+
+                    var CustomizeduserData = newopdModel.Select(e => new
+                    {
+                        e.EmpCode,
+                        e.EmpName,
+                        e.DOB,
+                        e.Gender,
+                        e.Department,
+                        e.Designation,
+                        e.BasicSalary,
+                        e.Code,
+                        e.Message
+
+                    });
+                    return CustomizeduserData;
                 }
                 else
                 {
                     model = new ResponseViewModel()
                     {
-                        Status = "Fail",
-                        Code = "404",
-                        Message = "Wrong Username and Password !",
+                        Code = 404,
+                        Message = "No Record Found !",
 
                     };
                     newmodel.Add(model);
-                    var CustomizedData = newmodel.Select(e => new
+                    var CustomizeduserData = newmodel.Select(e => new
                     {
-                        e.Status,
                         e.Code,
                         e.Message
                     });
 
-                    return CustomizedData;
+                    return CustomizeduserData;
                 }
             }
             catch (Exception ex)
             {
                 model = new ResponseViewModel()
                 {
-                    Status = " ",
-                    Code = "500",
+                    Code = 500,
                     Message = ex.Message,
 
                 };
                 newmodel.Add(model);
+                var CustomizedloginData = newmodel.Select(e => new
+                {
+                    e.Code,
+                    e.Message
+
+                });
+
+                return CustomizedloginData;
+            }
+        }
+        public dynamic SaveEmp(EmpDetails obj)
+        {
+
+            EmpDetails model = new EmpDetails();
+            List<EmpDetails> newmodel = new List<EmpDetails>();
+
+            ResponseViewModel resviewmodel = new ResponseViewModel();
+            List<ResponseViewModel> newresviewmodel = new List<ResponseViewModel>();
+
+            try
+            {
+                DataTable result = this.context.SaveEmp(obj);
+
+                if (Convert.ToInt32(result.Rows[0]["returnValue"].ToString()) > 0)
+                {
+                    model = new EmpDetails()
+                    {
+                        Code = 200,
+                        Message = "Employee Save Successfully.",
+
+                    };
+                    newmodel.Add(model);
+                }
+                else
+                {
+                    model = new EmpDetails()
+                    {
+                        Code = 404,
+                        Message = "Employee Save Process Failed !",
+
+                    };
+                    newmodel.Add(model);
+                }
+
                 var CustomizedData = newmodel.Select(e => new
                 {
-                    e.Status,
+                    e.Code,
+                    e.Message
+                });
+
+
+                return CustomizedData;
+
+
+            }
+            catch (Exception ex)
+            {
+                resviewmodel = new ResponseViewModel()
+                {
+                    Code = 500,
+                    Message = ex.Message,
+
+                };
+                newresviewmodel.Add(resviewmodel);
+                var CustomizedData = newresviewmodel.Select(e => new
+                {
                     e.Code,
                     e.Message
 
@@ -203,5 +178,136 @@ namespace WebApplication6.Repository
                 return CustomizedData;
             }
         }
+        public dynamic UpdateEmp(EmpDetails obj)
+        {
+
+            EmpDetails model = new EmpDetails();
+            List<EmpDetails> newmodel = new List<EmpDetails>();
+
+            ResponseViewModel resviewmodel = new ResponseViewModel();
+            List<ResponseViewModel> newresviewmodel = new List<ResponseViewModel>();
+
+            try
+            {
+                DataTable result = this.context.UpdateEmp(obj);
+
+                if (Convert.ToInt32(result.Rows[0]["returnValue"].ToString()) > 0)
+                {
+                    model = new EmpDetails()
+                    {
+                        Code = 200,
+                        Message = "Employee Update Successfully.",
+
+                    };
+                    newmodel.Add(model);
+                }
+                else
+                {
+                    model = new EmpDetails()
+                    {
+                        Code = 404,
+                        Message = "Employee Updation Process Failed !",
+
+                    };
+                    newmodel.Add(model);
+                }
+
+                var CustomizedData = newmodel.Select(e => new
+                {
+                    e.Code,
+                    e.Message
+                });
+
+
+                return CustomizedData;
+
+
+            }
+            catch (Exception ex)
+            {
+                resviewmodel = new ResponseViewModel()
+                {
+                    Code = 500,
+                    Message = ex.Message,
+
+                };
+                newresviewmodel.Add(resviewmodel);
+                var CustomizedData = newresviewmodel.Select(e => new
+                {
+                    e.Code,
+                    e.Message
+
+                });
+
+                return CustomizedData;
+            }
+        }
+        public dynamic DeleteEmp(EmpDetails obj)
+        {
+
+            EmpDetails model = new EmpDetails();
+            List<EmpDetails> newmodel = new List<EmpDetails>();
+
+            ResponseViewModel resviewmodel = new ResponseViewModel();
+            List<ResponseViewModel> newresviewmodel = new List<ResponseViewModel>();
+
+            try
+            {
+                DataTable result = this.context.DeleteEmp(obj);
+
+                if (Convert.ToInt32(result.Rows[0]["returnValue"].ToString()) > 0)
+                {
+                    model = new EmpDetails()
+                    {
+                        Code = 200,
+                        Message = "Employee Delete Successfully.",
+
+                    };
+                    newmodel.Add(model);
+                }
+                else
+                {
+                    model = new EmpDetails()
+                    {
+                        Code = 404,
+                        Message = "Employee Deletion Process Failed !",
+
+                    };
+                    newmodel.Add(model);
+                }
+
+                var CustomizedData = newmodel.Select(e => new
+                {
+                    e.Code,
+                    e.Message
+                });
+
+
+                return CustomizedData;
+
+
+            }
+            catch (Exception ex)
+            {
+                resviewmodel = new ResponseViewModel()
+                {
+                    Code = 500,
+                    Message = ex.Message,
+
+                };
+                newresviewmodel.Add(resviewmodel);
+                var CustomizedData = newresviewmodel.Select(e => new
+                {
+                    e.Code,
+                    e.Message
+
+                });
+
+                return CustomizedData;
+            }
+        }
+
+
+
     }
 }

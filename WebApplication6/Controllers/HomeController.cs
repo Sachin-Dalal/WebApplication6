@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,138 +18,239 @@ namespace WebApplication6.Controllers
     {
         private readonly ErpInterface _formData;
 
-        public string UserId = "";
         public HomeController(ErpInterface formData)
         {
             _formData = formData;
         }
-        
+
 
         public IActionResult Index()
         {
             return View();
         }
 
-        //[HttpPost]
-        //public dynamic GetColumnsName([FromBody] AppViewModel formViewDetails)
-        //{
-        //    ResponseViewModel model = new ResponseViewModel();
-
-        //    List<ResponseViewModel> newmodel = new List<ResponseViewModel>();
-        //    dynamic responseModel = new List<ResponseViewModel>();
-
-        //    //dynamic logindt = new DataTable();
-
-        //    try
-        //    {
-        //        //if (ModelState.IsValid)
-        //        //{
-
-
-        //        //dynamic logindt = _formData.GetColumnsName(formViewDetails);
-
-
-        //        model = new ResponseViewModel()
-        //        {
-        //            Status = "Success",
-        //            Code = "200",
-        //            Message = "Login Successfully !",
-
-        //        };
-        //        newmodel.Add(model);
-        //        var CustomizedData = newmodel.Select(e => new
-        //        {
-        //            e.Status,
-        //            e.Code,
-        //            e.Message
-        //        });
-
-        //        //return logindt;
-               
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        foreach (var item in responseModel)
-        //        {
-        //            item.Status = "Error";
-        //            item.Description = "Internal Server Error";
-        //            item.ErrorCode = HttpContext.Response.StatusCode.ToString();
-        //            item.ErrorMessage = ex.Message;
-        //            responseModel.Add(item);
-        //        }
-
-        //        return responseModel;
-        //    }
-        //}
+        public IActionResult Add_Emp()
+        {
+            ViewData["CurrentView"] = "Add Employee";
+            return View();
+        }
 
         [HttpPost]
-        public dynamic SaveColumnsDetails([FromBody] AppViewModel formViewDetails)
+        public async Task<dynamic> GetEmp()
         {
-            ResponseViewModel model = new ResponseViewModel();
-
-            List<ResponseViewModel> newmodel = new List<ResponseViewModel>();
+            ResponseViewModel responseViewModel = new ResponseViewModel();
+            List<ResponseViewModel> newresponseViewModel = new List<ResponseViewModel>();
             dynamic responseModel = new List<ResponseViewModel>();
-
-            DataTable savedt = new DataTable();
+            dynamic EmpResponse = new List<EmpDetails>();
 
             try
             {
-                if (ModelState.IsValid)
+
+                await Task.Run(() =>
                 {
+                    EmpResponse = _formData.GetEmp();
+                });
 
+                string Emp_String = JsonConvert.SerializeObject(EmpResponse);
+                dynamic Emp_Json = JsonConvert.DeserializeObject(Emp_String);
 
-                    DataTable logindt = _formData.SaveColumnsDetails(formViewDetails);
+                int ResponseCode = Emp_Json[0].Code;
 
-
-
-                    model = new ResponseViewModel()
+                if (ResponseCode == 200)
+                {
+                    responseViewModel = new ResponseViewModel()
                     {
-                        Status = "Success",
-                        Code = "200",
-                        Message = "Save Successfully !",
-
+                        Code = 200,
+                        DataObject = Emp_String,
+                        Message = "Success."
                     };
-                    newmodel.Add(model);
-                    var CustomizedData = newmodel.Select(e => new
-                    {
-                        e.Status,
-                        e.Code,
-                        e.Message
-                    });
-                    return model;
                 }
                 else
                 {
-                    model = new ResponseViewModel()
+                    responseViewModel = new ResponseViewModel()
                     {
-                        Status = "Fail",
-                        Code = "404",
-                        Message = "Request Failed !",
-
+                        Code = Emp_Json[0].Code,
+                        DataObject = Emp_String,
+                        Message = Emp_Json[0].Message
                     };
-                    newmodel.Add(model);
-                    var CustomizedData = newmodel.Select(e => new
-                    {
-                        e.Status,
-                        e.Code,
-                        e.Message
-                    });
-
-                    return CustomizedData;
                 }
 
+
+                newresponseViewModel.Add(responseViewModel);
+
+                return newresponseViewModel;
+            }
+            catch (Exception ex)
+            {
+                foreach (var item in responseModel)
+                {
+                    item.status = "Error";
+                    item.code = HttpContext.Response.StatusCode.ToString();
+                    item.message = ex.Message;
+                    responseModel.Add(item);
+                }
+
+                return responseModel;
+            }
+        }
+
+        [HttpPost]
+        public async Task<dynamic> SaveEmp([FromBody] EmpDetails obj)
+        {
+            dynamic responseModel = new List<ResponseViewModel>();
+            dynamic Response = new List<EmpDetails>();
+            string Message = "";
+            int Code;
+
+            try
+            {
+
+                if (obj != null)
+                {
+                    await Task.Run(() =>
+                    {
+                        Response = _formData.SaveEmp(obj);
+                    });
+
+                    string responsestring = JsonConvert.SerializeObject(Response);
+                    dynamic responsejson = JsonConvert.DeserializeObject(responsestring);
+
+                    int ResponseCode = responsejson[0].Code;
+                    Code = responsejson[0].Code;
+                    Message = responsejson[0].Message;
+
+                    return Json(new
+                    {
+                        Code = Code,
+                        Message = Message,
+                    });
+
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        Code = 404,
+                        Message = "Please Enter Employee Information !",
+                    });
+                }
 
             }
             catch (Exception ex)
             {
                 foreach (var item in responseModel)
                 {
-                    item.Status = "Error";
-                    item.Description = "Internal Server Error";
-                    item.ErrorCode = HttpContext.Response.StatusCode.ToString();
-                    item.ErrorMessage = ex.Message;
+                    item.Code = HttpContext.Response.StatusCode.ToString();
+                    item.Message = ex.Message;
+                    responseModel.Add(item);
+                }
+
+                return responseModel;
+            }
+        }
+
+        [HttpPost]
+        public async Task<dynamic> UpdateEmp([FromBody] EmpDetails obj)
+        {
+            dynamic responseModel = new List<ResponseViewModel>();
+            dynamic Response = new List<EmpDetails>();
+            string Message = "";
+            int Code;
+
+            try
+            {
+
+                if (obj != null)
+                {
+                    await Task.Run(() =>
+                    {
+                        Response = _formData.UpdateEmp(obj);
+                    });
+
+                    string responsestring = JsonConvert.SerializeObject(Response);
+                    dynamic responsejson = JsonConvert.DeserializeObject(responsestring);
+
+                    int ResponseCode = responsejson[0].Code;
+                    Code = responsejson[0].Code;
+                    Message = responsejson[0].Message;
+
+                    return Json(new
+                    {
+                        Code = Code,
+                        Message = Message,
+                    });
+
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        Code = 404,
+                        Message = "Please Enter Employee Information !",
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                foreach (var item in responseModel)
+                {
+                    item.Code = HttpContext.Response.StatusCode.ToString();
+                    item.Message = ex.Message;
+                    responseModel.Add(item);
+                }
+
+                return responseModel;
+            }
+        }
+
+        [HttpPost]
+        public async Task<dynamic> DeleteEmp([FromBody] EmpDetails obj)
+        {
+            dynamic responseModel = new List<ResponseViewModel>();
+            dynamic Response = new List<EmpDetails>();
+            string Message = "";
+            int Code;
+
+            try
+            {
+                if (obj != null)
+                {
+                    await Task.Run(() =>
+                    {
+                        Response = _formData.DeleteEmp(obj);
+                    });
+
+                    string responsestring = JsonConvert.SerializeObject(Response);
+                    dynamic responsejson = JsonConvert.DeserializeObject(responsestring);
+
+                    int ResponseCode = responsejson[0].Code;
+                    Code = responsejson[0].Code;
+                    Message = responsejson[0].Message;
+
+                    return Json(new
+                    {
+                        Code = Code,
+                        Message = Message,
+                    });
+
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        Code = 404,
+                        Message = "Please Enter Employee Information !",
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                foreach (var item in responseModel)
+                {
+                    item.Code = HttpContext.Response.StatusCode.ToString();
+                    item.Message = ex.Message;
                     responseModel.Add(item);
                 }
 

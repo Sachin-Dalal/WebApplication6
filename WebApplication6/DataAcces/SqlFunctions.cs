@@ -1,20 +1,17 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using System;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebApplication6.DataAcces
 {
-   
-    public class sqlfunction
+    class SqlFunctions
     {
+
 
         SqlConnection con;
         SqlCommand cmd;
@@ -22,7 +19,8 @@ namespace WebApplication6.DataAcces
         DataTable dt;
         DataSet ds;
         public string conString { get; }
-        public sqlfunction()
+
+        public SqlFunctions()
         {
             conString = GetConfiguration();
         }
@@ -133,45 +131,9 @@ namespace WebApplication6.DataAcces
             }
         }
 
-        public dynamic ReturnDsWithProc(string storedProcName, params SqlParameter[] arrParam)
-        {
-            try
-            {
 
-
-                ds = new DataSet();
-                con = new SqlConnection(conString);
-                cmd = new SqlCommand(storedProcName, con);
-                SqlDataAdapter adap = new SqlDataAdapter();
-                cmd.CommandType = CommandType.StoredProcedure;
-                if (con.State == ConnectionState.Closed || con.State == ConnectionState.Broken)
-                    con.Open();
-                if (arrParam != null)
-                {
-                    foreach (SqlParameter param in arrParam)
-                        cmd.Parameters.Add(param);
-                }
-                adap.SelectCommand = cmd;
-                adap.Fill(ds);
-                return ds;
-            }
-            catch (SqlException sx)
-            {
-                throw sx;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                cmd.Dispose();
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
-        }
         //Function executes any Insert, Update and Delete operation and returns the row affected.
-        public int ExecuteNonQueryWithProc(string storedProcName, System.Data.SqlClient.SqlParameter[] parameter, params SqlParameter[] arrParam)
+        public int ExecuteNonQueryWithProc(string storedProcName, params SqlParameter[] arrParam)
         {
 
             con = new SqlConnection(conString);

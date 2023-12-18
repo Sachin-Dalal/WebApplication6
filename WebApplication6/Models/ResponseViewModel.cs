@@ -7,8 +7,9 @@ namespace WebApplication6.Models
 {
     public class ResponseViewModel
     {
-        public string Status { get; set; }
-        public string Code { get; set; }
+        public int? Code { get; set; }
         public string Message { get; set; }
+        public string DataObject { get; set; }
+        public string URL { get; set; }
     }
 }
