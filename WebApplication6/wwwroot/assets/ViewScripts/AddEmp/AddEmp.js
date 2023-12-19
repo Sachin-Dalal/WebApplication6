@@ -12,6 +12,10 @@
 
     ResetEmpControl(LoginServiceURL);
 
+    $("#txtEmpCode").on("keyup", function () {
+        $("#DivEmpAlert").hide();
+    });
+
     $("#txtEmpName").on("keyup", function () {
         $("#DivEmpAlert").hide();
     });
@@ -38,7 +42,8 @@
 
 
     $("#btnSaveEmp").on("click", function () {
-        var EmpCode = $("#txtEmpCode").val();
+        var EmpId = $("#txtEmpId").val();
+        var EmpCode = $('#txtEmpCode').val();
         var EmpName = $('#txtEmpName').val();
         var DOB = $('#txtDOB').val();
         var Gender = $('#ddlGender').val();
@@ -46,6 +51,13 @@
         var Designation = $('#txtDesignation').val();
         var BasicSalary = $('#txtBasicSalary').val();
 
+        if (EmpCode == "") {
+            $('#txtEmpCode').focus();
+            $("#DivEmpAlert").show();
+            $("#DivEmpAlert").addClass("alert alert-danger");
+            $("#AlertEmpMsg").text("Please Enter Employee Code !");
+            return false;
+        }
 
         if (EmpName == "") {
             $('#txtEmpName').focus();
@@ -97,13 +109,14 @@
 
       
 
-        if (EmpCode == "") {
+        if (EmpId == "") {
 
             var EmpInfo = {
-                "EmpCode": 0,
+                "EmpId": 0,
+                "EmpCode": parseInt(EmpCode),
                 "EmpName": EmpName,
                 "DOB": DOB,
-                "Gender": Gender,
+                "Gender": parseInt(Gender),
                 "Department": Department,
                 "Designation": Designation,
                 "BasicSalary": BasicSalary
@@ -115,10 +128,11 @@
         } else {
 
             var EmpInfo = {
+                "EmpId": parseInt(EmpId),
                 "EmpCode": parseInt(EmpCode),
                 "EmpName": EmpName,
                 "DOB": DOB,
-                "Gender": Gender,
+                "Gender": parseInt(Gender),
                 "Department": Department,
                 "Designation": Designation,
                 "BasicSalary": BasicSalary
@@ -144,10 +158,11 @@ function ResetEmpControl(LoginServiceURL) {
     $("#tblEmpList tbody").remove();
     $("#DivEmpAlert").hide();
 
+    $("#txtEmpId").val("");
     $("#txtEmpCode").val("");
     $("#txtEmpName").val("");
     $("#txtDOB").val("");
-    $('#ddlGender').val("Male");
+    $('#ddlGender').val("1");
     $('#txtDepartment').val("");
     $('#txtDesignation').val("");
     $('#txtBasicSalary').val("");
@@ -172,18 +187,29 @@ function GetEmpList(LoginServiceURL) {
                     var Json = JSON.parse(response[0].dataObject);
                     $.each(Json, function (i, d) {
 
-                        var Edit = '<div class="pull-right action-buttons"><button id="btnEdit' + d.EmpCode + '" title="Edit" class="btn btn-xs btn-info"><i class="ace-icon fa fa-pencil bigger-120"></i></button>&nbsp;'
+                        var Edit = '<div class="pull-right action-buttons"><button id="btnEdit' + d.EmpId + '" title="Edit" class="btn btn-xs btn-info"><i class="ace-icon fa fa-pencil bigger-120"></i></button>&nbsp;'
 
-                        var Delete = '<button id="btnDelete' + d.EmpCode + '" title="Delete" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>'
+                        var Delete = '<button id="btnDelete' + d.EmpId + '" title="Delete" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>'
 
-                        $("#tblEmpList").append($("<tr  id='TR_" + d.EmpCode + "' data-uid=" + d.EmpCode + " ><td>" + d.EmpName + "</td><td>" + d.DOB + "</td><td>" + d.Gender + "</td><td>" + d.Department + "</td><td>" + d.Designation + "</td><td>" + d.BasicSalary + "</td><td>" + Edit + Delete + "</td></tr>"));
+                        var Gender = d.Gender;
+
+                        if (Gender === 1) {
+                            Gender = 'Male'
+                        }
+
+                        if (Gender === 0) {
+                            Gender = 'Female'
+                        }
+
+                        $("#tblEmpList").append($("<tr  id='TR_" + d.EmpId + "' data-uid=" + d.EmpId + " ><td>" + d.EmpCode + "</td><td>" + d.EmpName + "</td><td>" + d.DOB + "</td><td>" + d.Gender + "</td><td>" + d.Department + "</td><td>" + d.Designation + "</td><td>" + parseFloat(d.BasicSalary).toFixed(2, 18) + "</td><td>" + parseFloat(d.DearnessAllowanvce).toFixed(2, 18) + "</td><td>" + parseFloat(d.ConveyanceAllowance).toFixed(2, 18) + "</td><td>" + parseFloat(d.HouseRentAllowance).toFixed(2, 18) + "</td><td>" + parseFloat(d.GrossSalary).toFixed(2, 18) + "</td><td>" + parseFloat(d.PT).toFixed(2, 18) + "</td><td>" + parseFloat(d.TotalSalary).toFixed(2, 18) + "</td><td>" + Edit + "</td></tr>"));
 
                         //<td>" + d.UploadDate + "</td>
 
-                        $("#btnEdit" + d.EmpCode).on("click", function () {
+                        $("#btnEdit" + d.EmpId).on("click", function () {
                             $("#tblEmpList tr").removeClass("row_selected");
-                            $("#TR_" + d.OPDId).addClass("row_selected");
+                            $("#TR_" + d.EmpId).addClass("row_selected");
 
+                            $("#txtEmpId").val(d.EmpId);
                             $("#txtEmpCode").val(d.EmpCode);
                             $("#txtEmpName").val(d.EmpName);
                             $("#txtDOB").val(d.DOB);
@@ -193,10 +219,10 @@ function GetEmpList(LoginServiceURL) {
                             $("#txtBasicSalary").val(d.BasicSalary);
                         });
 
-                        $("#btnDelete" + d.EmpCode).on("click", function () {
+                        $("#btnDelete" + d.EmpId).on("click", function () {
 
                             var EmpInfo = {
-                                "EmpCode": parseInt(d.EmpCode),
+                                "EmpId": parseInt(d.EmpId),
                             }
 
                             DeleteEmp(LoginServiceURL, EmpInfo);
@@ -205,7 +231,7 @@ function GetEmpList(LoginServiceURL) {
 
 
 
-                    var columnSet = [{ "title": "Employee Code" }, { "title": "Employee Name" }, { "title": "Date Of Birth" }, { "title": "Gender" }, { "title": "Department" }, { "title": "Designation" }, { "title": "BasicSalary" }, { "title": "Action" }];
+                    var columnSet = [{ "title": "Employee Code" }, { "title": "Employee Name" }, { "title": "Date Of Birth" }, { "title": "Gender" }, { "title": "Department" }, { "title": "Designation" }, { "title": "BasicSalary" }, { "title": "DearnessAllowanvce" }, { "title": "ConveyanceAllowance" }, { "title": "HouseRentAllowance" }, { "title": "GrossSalary" }, { "title": "PT" }, { "title": "TotalSalary" }, { "title": "Action" }];
 
                     var tblSearch = "";
 

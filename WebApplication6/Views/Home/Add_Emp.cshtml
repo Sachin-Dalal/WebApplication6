@@ -86,7 +86,13 @@
                 <div class="widget-main">
                     <div class="row">
                         <div class="col-xs-12 col-md-12 col-sm-12">
-                            <input type="hidden" id="txtEmpCode">
+                            <input type="hidden" id="txtEmpId">
+                            <div class="col-xs-12 col-md-4 col-sm-12">
+                                <label>
+                                    Employee Code <span class="red">*</span>
+                                </label>
+                                <input class="form-control" type="number" id="txtEmpCode">
+                            </div>
                             <div class="col-xs-12 col-md-4 col-sm-12">
                                 <label>
                                     Employee Name <span class="red">*</span>
@@ -101,18 +107,7 @@
                                 <input class="form-control" type="date" id="txtDOB">
                             </div>
 
-                            <div class="col-xs-12 col-md-4 col-sm-12">
-                                <label>
-                                    Gender <span class="red">*</span>
-                                </label>
 
-                                <div>
-                                    <select id="ddlGender" class="form-control">
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -120,6 +115,18 @@
 
                     <div class="row">
                         <div class="col-xs-12 col-md-12 col-sm-12">
+                            <div class="col-xs-12 col-md-4 col-sm-12">
+                                <label>
+                                    Gender <span class="red">*</span>
+                                </label>
+
+                                <div>
+                                    <select id="ddlGender" class="form-control">
+                                        <option value="1">Male</option>
+                                        <option value="0">Female</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-xs-12 col-md-4 col-sm-12">
                                 <label>
                                     Department <span class="red">*</span>
@@ -133,8 +140,14 @@
                                 </label>
                                 <input class="form-control" type="text" id="txtDesignation">
                             </div>
+                        </div>
 
+                    </div>
 
+                    <div class="space-4"></div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-sm-12">
                             <div class="col-xs-12 col-md-4 col-sm-12">
                                 <label>
                                     Basic Salary <span class="red">*</span>

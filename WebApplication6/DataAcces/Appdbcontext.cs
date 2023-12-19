@@ -38,16 +38,17 @@ namespace WebApplication6.DataAcces
             try
             {
                 var parameter = new SqlParameter[]{
-                new SqlParameter("@EmpCode", obj.EmpCode),
-                new SqlParameter("@EmpName", obj.EmpName),
-                new SqlParameter("@DOB", obj.DOB),
+                 new SqlParameter("@EmployeeId", obj.EmpId),
+                new SqlParameter("@EmployeeCode", obj.EmpCode),
+                new SqlParameter("@EmployeeName", obj.EmpName),
+                new SqlParameter("@DateOfBirth", obj.DOB),
                 new SqlParameter("@Gender", obj.Gender),
                 new SqlParameter("@Department", obj.Department),
                 new SqlParameter("@Designation", obj.Designation),
                 new SqlParameter("@BasicSalary", obj.BasicSalary),
                 };
 
-                return (new SqlFunctions().ReturnDtWithProc("sp_SaveEmp", parameter));
+                return (new SqlFunctions().ReturnDtWithProc("sp_SaveUpdateEmp", parameter));
             }
             catch (Exception)
             {
@@ -60,16 +61,17 @@ namespace WebApplication6.DataAcces
             try
             {
                 var parameter = new SqlParameter[]{
-                new SqlParameter("@EmpCode", obj.EmpCode),
-                new SqlParameter("@EmpName", obj.EmpName),
-                new SqlParameter("@DOB", obj.DOB),
+                new SqlParameter("@EmployeeId", obj.EmpId),
+                new SqlParameter("@EmployeeCode", obj.EmpCode),
+                new SqlParameter("@EmployeeName", obj.EmpName),
+                new SqlParameter("@DateOfBirth", obj.DOB),
                 new SqlParameter("@Gender", obj.Gender),
                 new SqlParameter("@Department", obj.Department),
                 new SqlParameter("@Designation", obj.Designation),
                 new SqlParameter("@BasicSalary", obj.BasicSalary),
                 };
 
-                return (new SqlFunctions().ReturnDtWithProc("sp_UpdateEmp", parameter));
+                return (new SqlFunctions().ReturnDtWithProc("sp_SaveUpdateEmp", parameter));
             }
             catch (Exception)
             {

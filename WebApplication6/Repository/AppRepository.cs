@@ -48,13 +48,20 @@ namespace WebApplication6.Repository
                     {
                         opdModel = new EmpDetails()
                         {
-                            EmpCode = Convert.ToInt32(result.Rows[i]["EmpCode"].ToString()),
-                            EmpName = result.Rows[i]["EmpName"].ToString(),
-                            DOB = result.Rows[i]["DOB"].ToString(),
-                            Gender = result.Rows[i]["Gender"].ToString(),
+                            EmpId = Convert.ToInt32(result.Rows[i]["EmployeeId"].ToString()),
+                            EmpCode = Convert.ToInt32(result.Rows[i]["EmployeeCode"].ToString()),
+                            EmpName = result.Rows[i]["EmployeeName"].ToString(),
+                            DOB = result.Rows[i]["DateOfBirth"].ToString(),
+                            Gender = Convert.ToInt32(result.Rows[i]["Gender"].ToString()),
                             Department = result.Rows[i]["Department"].ToString(),
                             Designation = result.Rows[i]["Designation"].ToString(),
                             BasicSalary = result.Rows[i]["BasicSalary"].ToString(),
+                            DearnessAllowanvce = result.Rows[i]["DearnessAllowanvce"].ToString(),
+                            ConveyanceAllowance = result.Rows[i]["ConveyanceAllowance"].ToString(),
+                            HouseRentAllowance = result.Rows[i]["HouseRentAllowance"].ToString(),
+                            GrossSalary = result.Rows[i]["GrossSalary"].ToString(),
+                            PT = result.Rows[i]["PT"].ToString(),
+                            TotalSalary = result.Rows[i]["TotalSalary"].ToString(),
                             Code = 200,
                             Message = "Success"
                         };
@@ -64,6 +71,7 @@ namespace WebApplication6.Repository
 
                     var CustomizeduserData = newopdModel.Select(e => new
                     {
+                        e.EmpId,
                         e.EmpCode,
                         e.EmpName,
                         e.DOB,
@@ -71,6 +79,12 @@ namespace WebApplication6.Repository
                         e.Department,
                         e.Designation,
                         e.BasicSalary,
+                        e.DearnessAllowanvce,
+                        e.ConveyanceAllowance,
+                        e.HouseRentAllowance,
+                        e.GrossSalary,
+                        e.PT,
+                        e.TotalSalary,
                         e.Code,
                         e.Message
 
