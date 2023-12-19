@@ -84,7 +84,7 @@ namespace WebApplication6.DataAcces
             try
             {
                 var parameter = new SqlParameter[]{
-                    new SqlParameter("@EmpCode", obj.EmpCode)
+                    new SqlParameter("@EmployeeId", obj.EmpId)
                 };
 
                 return (new SqlFunctions().ReturnDtWithProc("sp_DeleteEmp", parameter));
