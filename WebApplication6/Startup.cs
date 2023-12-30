@@ -30,6 +30,7 @@ namespace WebApplication6
             services.AddControllersWithViews();
             services.AddDbContextPool<Appdbcontext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+ 
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession(o => {
                 o.IdleTimeout = TimeSpan.FromSeconds(1800);
@@ -67,7 +68,8 @@ namespace WebApplication6
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Add_Emp}/{id?}");
+                     //pattern: "{controller=Home}/{action=Add_Emp}/{id?}");
+                     pattern: "{controller=Home}/{action=Create_Certificate}/{id?}");
             });
         }
     }

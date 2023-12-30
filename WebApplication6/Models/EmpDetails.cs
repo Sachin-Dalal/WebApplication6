@@ -24,4 +24,20 @@ namespace WebApplication6.Models
         public int Code { get; set; }
         public string Message { get; set; }
     }
+
+
+    public class CertificateDetails
+    {
+        public string Name { get; set; }
+        public string Mobile { get; set; }
+        public string EmailId { get; set; }
+        public string CurrentDate { get; set; }
+    }
+
+
+    public class Response
+    {
+        public int Code { get; set; }
+    }
+
 }

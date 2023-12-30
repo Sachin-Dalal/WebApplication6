@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -23,11 +24,29 @@ namespace WebApplication6.Controllers
             _formData = formData;
         }
 
+        private const string JsonFilePath = @"CertificateData/CertificateData.json";
+
 
         public IActionResult Index()
         {
             return View();
         }
+
+        public IActionResult Create_Certificate()
+        {
+            return View();
+        }
+
+        public IActionResult Download_Certificate(string Name, string Date)
+        {
+
+            ViewData["Name"] = Name;
+            ViewData["Date"] = Date;
+
+            return View();
+        }
+
+
 
         public IActionResult Add_Emp()
         {
@@ -256,6 +275,91 @@ namespace WebApplication6.Controllers
 
                 return responseModel;
             }
+        }
+
+        [HttpPost]
+        public async Task<dynamic> GenerateCertificate([FromBody] CertificateDetails newData)
+        {
+            CertificateDetails certificateDetails = new CertificateDetails();
+            List<CertificateDetails> newcertificateDetails = new List<CertificateDetails>();
+
+            Response response = new Response();
+            List<Response> newResponse = new List<Response>();
+
+            newcertificateDetails = LoadDataFromJson();
+
+            if(newcertificateDetails == null)
+            {
+                List<CertificateDetails> _certificateDetails = new List<CertificateDetails>();
+                certificateDetails = new CertificateDetails()
+                {
+                    Name = newData.Name,
+                    EmailId = newData.EmailId,
+                    Mobile = newData.Mobile,
+                    CurrentDate = newData.CurrentDate
+                };
+
+                _certificateDetails.Add(certificateDetails);
+
+                SaveDataToJson(_certificateDetails, false);
+
+                ViewData["Name"] = newData.Name;
+                ViewData["Date"] = newData.CurrentDate;
+
+                response = new Response()
+                {
+                    Code = 200,
+                };
+
+                newResponse.Add(response);
+            }
+            else
+            {
+                if (newcertificateDetails.Any(d => (d.Name == newData.Name && d.Mobile == newData.Mobile) || (d.Name == newData.Name && d.EmailId == newData.EmailId) || (d.Mobile == newData.Mobile && d.EmailId == newData.EmailId)))
+                {
+
+                    response = new Response()
+                    {
+                        Code = 400,
+                    };
+
+                    newResponse.Add(response);
+                }
+                else
+                {
+                    newcertificateDetails.Add(newData);
+                    SaveDataToJson(newcertificateDetails, true);
+
+                    ViewData["Name"] = newData.Name;
+                    ViewData["Date"] = newData.CurrentDate;
+
+                    response = new Response()
+                    {
+                        Code = 200,
+                    };
+
+                    newResponse.Add(response);
+                }      
+            }
+
+            return newResponse;
+        }
+
+        private List<CertificateDetails> LoadDataFromJson()
+        {
+            if (System.IO.File.Exists(JsonFilePath))
+            {
+                string jsonData = System.IO.File.ReadAllText(JsonFilePath);
+                return JsonConvert.DeserializeObject<List<CertificateDetails>>(jsonData);
+            }
+            return new List<CertificateDetails>();
+        }
+
+        private void SaveDataToJson(List<CertificateDetails> data, bool exist)
+        {
+            string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
+            System.IO.File.WriteAllText(JsonFilePath, jsonData);
+
         }
 
     }

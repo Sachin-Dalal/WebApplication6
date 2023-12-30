@@ -1,0 +1,86 @@
+﻿@{
+    Layout = null;
+
+    var name = ViewData["Name"] as string;
+    var date = ViewData["Date"] as string;
+}
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Designerz</title>
+    <link rel="icon" type="image/x-icon" href="../newassets/images/Favicon.png" />
+    <link rel="stylesheet" href="../newassets/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="../newassets/css/responsive.css" asp-append-version="true" />
+</head>
+<body>
+    <div id="divCertificate">
+        <section class="template">
+            <div class="container">
+                <img class="topcorner corner"
+                     src="../newassets/images/TopCorner.png"
+                     alt="Top Corner" />
+                <img class="logo" src="../newassets/images/Desiners.png" alt="Desiners" />
+                <img class="texturelogo"
+                     src="../newassets/images/DesinerzTextureLogo.png"
+                     alt="Desiners" />
+                <h3>Certificate of Completion</h3>
+                <h1>The Completion of Photshop Mastery Course - 2023</h1>
+                <div class="o_detial">
+                    <p>introduced by</p>
+                    <p class="o_name">Jatin Wadhwa</p>
+                    <p class="o_position">(Lead UI/UX Designer)</p>
+                </div>
+                <div class="customer_dettail">
+                    <p>Completed by</p>
+                    <div class="c_name">@name</div>
+                    <p class="completed_date">
+                        Date - <span class="date">@date</span>
+                    </p>
+                </div>
+                <img class="bottomcorner corner"
+                     src="../newassets/images/BottomCorner.png"
+                     alt="Bottom Corner" />
+            </div>
+        </section>
+    </div>
+    <script src="../newassets/js/jquery-2.1.4.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const element = $("#divCertificate").html();
+
+            var name = $(".c_name").html();
+
+            // Remove spaces
+            name = name.replace(/\s/g, '');
+
+            // Replace underscores
+            name = name.replace(/_/g, '');
+
+            const options = {
+                margin: 0, // You can adjust the margin as needed
+                filename: name + "_" + 'Certificate.pdf', // Set the filename
+                image: { type: 'jpeg', quality: 200 }, // You can customize image settings
+                html2canvas: { scale: 2 }, // You can adjust the scale if needed
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } // Set orientation to landscape
+            };
+
+            html2pdf(element, options);
+
+            window.setTimeout(function () {
+                window.close();
+            }, 100);
+
+        });
+    </script>
+
+</body>
+</html>

@@ -372,6 +372,14 @@
                     <b class="arrow"></b>
                 </li>
 
+                <li>
+                    <a asp-controller="Home" asp-action="Create_Certificate">
+                        <i class="menu-icon fa fa-user-plus"></i>
+                        <span class="menu-text"> Create Certificate </span>
+                    </a>
+
+                    <b class="arrow"></b>
+                </li>
             </ul><!-- /.nav-list -->
 
             @*<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -449,9 +457,6 @@
     <script src="~/assets/js/chosen.jquery.min.js"></script>
 
     @RenderSection("Scripts", required: true)
-
-    <!-- inline scripts related to this page -->
-    <script src="~/assets/ViewScripts/Profile/Custom.js" asp-append-version="true"></script>
 
 </body>
 </html>
