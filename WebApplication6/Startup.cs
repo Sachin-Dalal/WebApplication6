@@ -68,8 +68,8 @@ namespace WebApplication6
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                     //pattern: "{controller=Home}/{action=Add_Emp}/{id?}");
-                     pattern: "{controller=Home}/{action=Create_Certificate}/{id?}");
+                     pattern: "{controller=Home}/{action=Add_Emp}/{id?}");
+                     //pattern: "{controller=Home}/{action=Create_Certificate}/{id?}");
             });
         }
     }

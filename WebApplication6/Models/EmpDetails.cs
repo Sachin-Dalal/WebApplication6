@@ -15,12 +15,6 @@ namespace WebApplication6.Models
         public string Department { get; set; }
         public string Designation { get; set; }
         public string BasicSalary { get; set; }
-        public string DearnessAllowanvce { get; set; }
-        public string ConveyanceAllowance { get; set; }
-        public string HouseRentAllowance { get; set; }
-        public string GrossSalary { get; set; }
-        public string PT { get; set; }
-        public string TotalSalary { get; set; }
         public int Code { get; set; }
         public string Message { get; set; }
     }

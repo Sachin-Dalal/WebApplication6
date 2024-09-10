@@ -48,20 +48,15 @@ namespace WebApplication6.Repository
                     {
                         opdModel = new EmpDetails()
                         {
-                            EmpId = Convert.ToInt32(result.Rows[i]["EmployeeId"].ToString()),
-                            EmpCode = Convert.ToInt32(result.Rows[i]["EmployeeCode"].ToString()),
-                            EmpName = result.Rows[i]["EmployeeName"].ToString(),
-                            DOB = result.Rows[i]["DateOfBirth"].ToString(),
+                            EmpId = Convert.ToInt32(result.Rows[i]["EmpId"].ToString()),
+                            EmpCode = Convert.ToInt32(result.Rows[i]["EmpCode"].ToString()),
+                            EmpName = result.Rows[i]["EmpName"].ToString(),
+                            DOB = result.Rows[i]["DOB"].ToString(),
                             Gender = Convert.ToInt32(result.Rows[i]["Gender"].ToString()),
                             Department = result.Rows[i]["Department"].ToString(),
                             Designation = result.Rows[i]["Designation"].ToString(),
                             BasicSalary = result.Rows[i]["BasicSalary"].ToString(),
-                            DearnessAllowanvce = result.Rows[i]["DearnessAllowanvce"].ToString(),
-                            ConveyanceAllowance = result.Rows[i]["ConveyanceAllowance"].ToString(),
-                            HouseRentAllowance = result.Rows[i]["HouseRentAllowance"].ToString(),
-                            GrossSalary = result.Rows[i]["GrossSalary"].ToString(),
-                            PT = result.Rows[i]["PT"].ToString(),
-                            TotalSalary = result.Rows[i]["TotalSalary"].ToString(),
+                        
                             Code = 200,
                             Message = "Success"
                         };
@@ -79,12 +74,6 @@ namespace WebApplication6.Repository
                         e.Department,
                         e.Designation,
                         e.BasicSalary,
-                        e.DearnessAllowanvce,
-                        e.ConveyanceAllowance,
-                        e.HouseRentAllowance,
-                        e.GrossSalary,
-                        e.PT,
-                        e.TotalSalary,
                         e.Code,
                         e.Message
 
@@ -139,9 +128,9 @@ namespace WebApplication6.Repository
 
             try
             {
-                DataTable result = this.context.SaveEmp(obj);
+                dynamic result = this.context.SaveEmp(obj);
 
-                if (Convert.ToInt32(result.Rows[0]["returnValue"].ToString()) > 0)
+                if (Convert.ToInt32(result) > 0)
                 {
                     model = new EmpDetails()
                     {
@@ -203,9 +192,9 @@ namespace WebApplication6.Repository
 
             try
             {
-                DataTable result = this.context.UpdateEmp(obj);
+                dynamic result = this.context.UpdateEmp(obj);
 
-                if (Convert.ToInt32(result.Rows[0]["returnValue"].ToString()) > 0)
+                if (Convert.ToInt32(result) > 0)
                 {
                     model = new EmpDetails()
                     {
@@ -267,9 +256,9 @@ namespace WebApplication6.Repository
 
             try
             {
-                DataTable result = this.context.DeleteEmp(obj);
+                dynamic result = this.context.DeleteEmp(obj);
 
-                if (Convert.ToInt32(result.Rows[0]["returnValue"].ToString()) > 0)
+                if (Convert.ToInt32(result) > 0)
                 {
                     model = new EmpDetails()
                     {

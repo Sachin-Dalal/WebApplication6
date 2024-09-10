@@ -201,7 +201,7 @@ function GetEmpList(LoginServiceURL) {
                             Gender = 'Female'
                         }
 
-                        $("#tblEmpList").append($("<tr  id='TR_" + d.EmpId + "' data-uid=" + d.EmpId + " ><td>" + d.EmpCode + "</td><td>" + d.EmpName + "</td><td>" + d.DOB + "</td><td>" + d.Gender + "</td><td>" + d.Department + "</td><td>" + d.Designation + "</td><td>" + parseFloat(d.BasicSalary).toFixed(2, 18) + "</td><td>" + parseFloat(d.DearnessAllowanvce).toFixed(2, 18) + "</td><td>" + parseFloat(d.ConveyanceAllowance).toFixed(2, 18) + "</td><td>" + parseFloat(d.HouseRentAllowance).toFixed(2, 18) + "</td><td>" + parseFloat(d.GrossSalary).toFixed(2, 18) + "</td><td>" + parseFloat(d.PT).toFixed(2, 18) + "</td><td>" + parseFloat(d.TotalSalary).toFixed(2, 18) + "</td><td>" + Edit + Delete + "</td></tr>"));
+                        $("#tblEmpList").append($("<tr  id='TR_" + d.EmpId + "' data-uid=" + d.EmpId + " ><td>" + d.EmpCode + "</td><td>" + d.EmpName + "</td><td>" + d.DOB + "</td><td>" + d.Gender + "</td><td>" + d.Department + "</td><td>" + d.Designation + "</td><td>" + parseFloat(d.BasicSalary).toFixed(2, 18) + "</td><td>" + Edit + Delete + "</td></tr>"));
 
                         //<td>" + d.UploadDate + "</td>
 
@@ -231,7 +231,7 @@ function GetEmpList(LoginServiceURL) {
 
 
 
-                    var columnSet = [{ "title": "Employee Code" }, { "title": "Employee Name" }, { "title": "Date Of Birth" }, { "title": "Gender" }, { "title": "Department" }, { "title": "Designation" }, { "title": "BasicSalary" }, { "title": "DearnessAllowanvce" }, { "title": "ConveyanceAllowance" }, { "title": "HouseRentAllowance" }, { "title": "GrossSalary" }, { "title": "PT" }, { "title": "TotalSalary" }, { "title": "Action" }];
+                    var columnSet = [{ "title": "Employee Code" }, { "title": "Employee Name" }, { "title": "Date Of Birth" }, { "title": "Gender" }, { "title": "Department" }, { "title": "Designation" }, { "title": "BasicSalary" }, { "title": "Action" }];
 
                     var tblSearch = "";
 

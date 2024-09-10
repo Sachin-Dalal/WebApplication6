@@ -48,7 +48,7 @@ namespace WebApplication6.DataAcces
                 new SqlParameter("@BasicSalary", obj.BasicSalary),
                 };
 
-                return (new SqlFunctions().ReturnDtWithProc("sp_SaveUpdateEmp", parameter));
+                return (new SqlFunctions().ExecuteNonQueryWithProc("sp_SaveUpdateEmp", parameter));
             }
             catch (Exception)
             {
@@ -71,7 +71,7 @@ namespace WebApplication6.DataAcces
                 new SqlParameter("@BasicSalary", obj.BasicSalary),
                 };
 
-                return (new SqlFunctions().ReturnDtWithProc("sp_SaveUpdateEmp", parameter));
+                return (new SqlFunctions().ExecuteNonQueryWithProc("sp_SaveUpdateEmp", parameter));
             }
             catch (Exception)
             {
@@ -87,7 +87,7 @@ namespace WebApplication6.DataAcces
                     new SqlParameter("@EmployeeId", obj.EmpId)
                 };
 
-                return (new SqlFunctions().ReturnDtWithProc("sp_DeleteEmp", parameter));
+                return (new SqlFunctions().ExecuteNonQueryWithProc("sp_DeleteEmp", parameter));
             }
             catch (Exception)
             {
